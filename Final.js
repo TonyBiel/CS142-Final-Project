@@ -54,7 +54,15 @@ function startGame()
 
 
 updateGame()       // main game loop
-    moveBaton()    // moves the baton left or right if a button is being held down
+function moveBaton()    // moves the baton left or right if a button is being held down
+{
+    baton = document.getElementById('moveLeft()').addEventListener('click', () => {
+        position -= 10; //move left by 20px
+     })
+  document.getElementById('moveRight').addEventListener('click', () => {
+    position += 20; //move right by 20px
+  })   
+}   // moves the baton left or right if a button is being held down
     releaseBubble() // creates a new bubble when enough steps have passed
     moveBubbles()  // moves all active bubbles downward
     checkBubbles() // checks whether bubbles were burst or escaped
