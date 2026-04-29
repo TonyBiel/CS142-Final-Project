@@ -27,7 +27,7 @@ var batonColor;
 
 function startGame()
 {
-    canvas = document.getElementById(''); // insert canvas name here
+    canvas = document.getElementById('myCanvas');
     pen = canvas.getContext('2d');
 
     bubbles = [];
