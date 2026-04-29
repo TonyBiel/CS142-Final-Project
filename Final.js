@@ -30,9 +30,25 @@ function startGame()
     canvas = document.getElementById('myCanvas');
     pen = canvas.getContext('2d');
 
-    bubbles = [];
+    bubbles = [];        // start with no bubbles on the screen
+    stepCount = 0;       // start the step counter at 0
+    burstCount = 0;      // start with 0 popped bubbles
+    escapedCount = 0;    // start with 0 escaped bubbles
+    releasedCount = 0;   // start with 0 released bubbles
+    releaseRate = 35;    // start on easy mode
+    gameOver = false;    // 
+    
+    batonX = 200;         // starting x position
+    batonY = 250;         // fixed y position
+    batonWidth = 50;    
+    batonHeight = 10;
+    batonDX = 0;           // baton is not moving at the start
+    batonSpeed = 20;       // baton moves 20 pixels per step
+    batonColor = 'blue';   // baton color required by the project
 
+    timer = setInterval(updateGame, 50);             // run updateGame every 50 milliseconds
 }
+
 
 
 
