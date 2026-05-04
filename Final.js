@@ -92,4 +92,11 @@ stopMove()         // stops the baton from moving
 
 check(value)       // changes the difficulty based on the radio button selected
 
-randomColor()      // creates and returns a random color for a bubble
+function randomColor()      // creates and returns a random color for a bubble
+{
+    var red = Math.floor(Math.random() * 256);
+    var green = Math.floor(Math.random() * 256);
+    var blue = Math.floor(Math.random() * 256);
+
+    return 'rgb(' + red + ',' + green + ',' + blue + ')';
+}
