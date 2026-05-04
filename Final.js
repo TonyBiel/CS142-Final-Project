@@ -79,13 +79,24 @@ function moveBaton()    // moves the baton left or right if a button is being he
     position += 20; //move right by 20px
   })   
 }   // moves the baton left or right if a button is being held down
-    releaseBubble() // creates a new bubble when enough steps have passed
-    moveBubbles()  // moves all active bubbles downward
-    checkBubbles() // checks whether bubbles were burst or escaped
-    drawEverything() // clears and redraws the canvas, bubbles, and baton
-    updateStats()  // updates the burst, escaped, and steps text on the page
-    checkGameOver() // ends the game after all 100 bubbles are burst or escaped
 
+
+releaseBubble() // creates a new bubble when enough steps have passed
+
+
+function moveBubbles()        // moves all active bubbles downward
+{
+    for (var i = 0; i < bubbles.length; i++)
+    {
+        bubbles[i][1] += bubbleSpeed;  // add to the y position so the bubble moves down
+    }
+}
+
+
+checkBubbles() // checks whether bubbles were burst or escaped
+drawEverything() // clears and redraws the canvas, bubbles, and baton
+updateStats()  // updates the burst, escaped, and steps text on the page
+checkGameOver() // ends the game after all 100 bubbles are burst or escaped
 moveLeft()         // starts moving the baton left
 moveRight()        // starts moving the baton right
 stopMove()         // stops the baton from moving
