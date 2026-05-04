@@ -53,7 +53,23 @@ function startGame()
 
 
 
-updateGame()       // main game loop
+function updateGame()       // main game loop
+{
+    if (gameOver)
+    {
+        return;
+    }
+
+    stepCount++;    // counts one game step every 50 milliseconds
+    moveBaton();    // moves the baton left or right if a button is being held down
+    releaseBubble(); // creates a new bubble when enough steps have passed
+    moveBubbles();  // moves all active bubbles downward
+    checkBubbles(); // checks whether bubbles were burst or escaped
+    drawEverything(); // clears and redraws the canvas, bubbles, and baton
+    updateStats();  // updates the burst, escaped, and steps text on the page
+    checkGameOver(); // ends the game after all 100 bubbles are burst or escaped
+}
+
 function moveBaton()    // moves the baton left or right if a button is being held down
 {
     baton = document.getElementById('moveLeft()').addEventListener('click', () => {
