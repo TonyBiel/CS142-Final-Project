@@ -13,7 +13,24 @@ var burstCount;     // number of bubbles popped by the batton
 var escapedCount;   //number of bubbles that pass the button
 var releasedCount;  // number of bubbles released so far
 var releaseRate;    // how often a new bubble gets released, depending on difficulty
-var timer;          // timer for the game loop
+var timer;     
+function startTimer(display){
+    startTime = Date.now()
+
+    function updateTimer(){
+        let elapsed = Math.floor ((Date.now() - startTime) / 1000);
+        let minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+        let seconds = String(elapsed % 60).padStart(2, '0');
+        display.textContent = minutes + ':' + seconds;
+    }
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+}
+function stopTimer(){
+    clearInterval(timerInterval);
+    timerInterval = null;
+
+}
 var gameOver;       // determines when game ends
 
 // baton variables
@@ -97,8 +114,23 @@ checkBubbles() // checks whether bubbles were burst or escaped
 drawEverything() // clears and redraws the canvas, bubbles, and baton
 updateStats()  // updates the burst, escaped, and steps text on the page
 checkGameOver() // ends the game after all 100 bubbles are burst or escaped
-moveLeft()         // starts moving the baton left
-moveRight()        // starts moving the baton right
+moveLeft()
+    function moveLeft() {
+document.getElementById('moveLeft').addEventListener('click', function(){
+    postition -= step;
+    if (postition <0) position = 0; 
+    baton.style.left = postition + 'px'
+
+});}
+        // starts moving the baton left
+moveRight()    
+    function moveRight() {
+document.getElementById('moveRight').addEventListener('click', function(){
+    postion += step;
+    const maxRight = window.innerWidth - baton.offsetWidth;
+    if (position > maxRight) postion = maxRight;
+    baton.style.left = position + 'px'
+});}   // starts moving the baton right
 stopMove()         // stops the baton from moving
 
 check(value)       // changes the difficulty based on the radio button selected
