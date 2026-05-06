@@ -110,7 +110,33 @@ function moveBubbles()        // moves all active bubbles downward
 }
 
 
-checkBubbles() // checks whether bubbles were burst or escaped
+function checkBubbles() // checks whether bubbles were burst or escaped
+{
+    for (var i = bubbles.length - 1; i >= 0; i--)
+    {
+        var bubbleX = bubbles[i][0];
+        var bubbleY = bubbles[i][1];
+
+        // A bubble bursts if any part of the circle touches the baton.
+        var closestX = Math.max(batonX, Math.min(bubbleX, batonX + batonWidth));
+        var closestY = Math.max(batonY, Math.min(bubbleY, batonY + batonHeight));
+        var distanceX = bubbleX - closestX;
+        var distanceY = bubbleY - closestY;
+        var bubbleHitBaton = distanceX * distanceX + distanceY * distanceY <= bubbleRadius * bubbleRadius;
+
+        if (bubbleHitBaton)
+        {
+            burstCount++;
+            bubbles.splice(i, 1);
+        }
+        // A bubble escapes if it reaches the bottom of the canvas.
+        else if (bubbleY + bubbleRadius >= canvas.height)
+        {
+            escapedCount++;
+            bubbles.splice(i, 1);
+        }
+    }
+}
 drawEverything() // clears and redraws the canvas, bubbles, and baton
 updateStats()  // updates the burst, escaped, and steps text on the page
 checkGameOver() // ends the game after all 100 bubbles are burst or escaped
