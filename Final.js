@@ -95,7 +95,7 @@ function moveBaton()    // moves the baton left or right if a button is being he
   document.getElementById('moveRight').addEventListener('click', () => {
     position += 20; //move right by 20px
   })   
-}   // moves the baton left or right if a button is being held down
+}
 
 function releaseBubble() // creates a new bubble when enough steps have passed
 {
