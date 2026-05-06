@@ -147,6 +147,21 @@ function checkBubbles() // checks whether bubbles were burst or escaped
     }
 }
 drawEverything() // clears and redraws the canvas, bubbles, and baton
+{
+    pen.fillStyle = '#EAEDDC';
+    pen.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (var i = 0; i < bubbles.length; i++)
+    {
+        pen.beginPath();
+        pen.arc(bubbles[i][0], bubbles[i][1], bubbleRadius, 0, 2 * Math.PI);
+        pen.fillStyle = bubbles[i][2];
+        pen.fill();
+    }
+
+    pen.fillStyle = batonColor;
+    pen.fillRect(batonX, batonY, batonWidth, batonHeight);
+}
 updateStats()  // updates the burst, escaped, and steps text on the page
 checkGameOver() // ends the game after all 100 bubbles are burst or escaped
 moveLeft()
