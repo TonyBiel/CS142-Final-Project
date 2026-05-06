@@ -97,9 +97,18 @@ function moveBaton()    // moves the baton left or right if a button is being he
   })   
 }   // moves the baton left or right if a button is being held down
 
+function releaseBubble() // creates a new bubble when enough steps have passed
+{
+    if (releasedCount < totalBubbles && stepCount % releaseRate == 0)
+    {
+        var bubbleX = Math.floor(Math.random() * (canvas.width - bubbleRadius * 2)) + bubbleRadius;
+        var bubbleY = bubbleRadius;
+        var bubbleColor = randomColor();
 
-releaseBubble() // creates a new bubble when enough steps have passed
-
+        bubbles.push([bubbleX, bubbleY, bubbleColor]);
+        releasedCount++;
+    }
+}
 
 function moveBubbles()        // moves all active bubbles downward
 {
