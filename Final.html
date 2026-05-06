@@ -6,35 +6,33 @@
     <script src= "Final.js" type="text/javascript"></script>
 </head> 
     <h2 style="text-align: center"> Bubble Bursting Game</h2>
-    <body onload="startup();">
+    <body onload="startGame();">
         <div style="text-align:center;">
-            <canvas id="'myCanvas" width="400" height="400"  
-            style="border:10px solid #000000;">
-        </canvas>      
+            <canvas id="myCanvas" width="400" height="400"  
+            style="border:10px solid #000000;"></canvas>
+        </canvas>  
+        <div id="timer">00:00</div>    
         <p>
-            <input type="button" value="Left" onclick="moveLeft();">
-            <input type="button" value="Right" onclick="moveRight();">
+            <input type="button" value="Left" id="moveLeft();">
+            <input type="button" value="Right" id="moveRight();">
         </p>
         <hr>
         <p>
        
             <form action="/action_page.php">
             
-            <input type="radio" id="modeEasy()" name="gamemode" value="Easy">
+            <input type="radio" id="modeEasy" name="gamemode" value="Easy">
                 <label for="modeEasy()">Easy</label>
             
-             <input type="radio" id="modeMod()" name="gamemode" value="Moderate">
+             <input type="radio" id="modeMod" name="gamemode" value="Moderate">
                 <label for="modeMod()">Moderate</label>
             
-            <input type="radio" id="modeHard()" name="gamemode" value="Hard">
+            <input type="radio" id="modeHard" name="gamemode" value="Hard">
                 <label for="modeHard()">Hard</label>
         </form>
         </p>
 
         </div>
-    </body>
-
-</html>
     </body>
 
 </html>
