@@ -14,8 +14,20 @@ var escapedCount;   //number of bubbles that pass the button
 var releasedCount;  // number of bubbles released so far
 var releaseRate;    // how often a new bubble gets released, depending on difficulty
 var timer;     
+var startTime;      // starting time for the clock
+var timerInterval; // timer for the clock
+var statsText;     // paragraph for the game stats
+var outputText;    // spot for the final message
+var leftButton;    // left button on the page
+var rightButton;   // right button on the page
 function startTimer(display){
-    startTime = Date.now()
+    if (display == null)
+    {
+        return;     // stops if there is no timer display
+    }
+
+    stopTimer();    // clears the old timer
+    startTime = Date.now();
 
     function updateTimer(){
         let elapsed = Math.floor ((Date.now() - startTime) / 1000);
@@ -27,8 +39,11 @@ function startTimer(display){
     timerInterval = setInterval(updateTimer, 1000);
 }
 function stopTimer(){
-    clearInterval(timerInterval);
-    timerInterval = null;
+    if (timerInterval != null)
+    {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
 
 }
 var gameOver;       // determines when game ends
@@ -45,6 +60,8 @@ var batonColor;
 function startGame()
 {
     canvas = document.getElementById('myCanvas');
+    canvas.width = 450;         // set the required width
+    canvas.height = 300;        // set the required height
     pen = canvas.getContext('2d');
 
     bubbles = [];        // start with no bubbles on the screen
@@ -63,6 +80,15 @@ function startGame()
     batonSpeed = 20;       // baton moves 20 pixels per step
     batonColor = 'blue';   // baton color required by the project
 
+    setupPage();            // sets up buttons and text
+    drawEverything();       // draws the starting screen
+    updateStats();          // shows the starting stats
+    startTimer(document.getElementById('timer')); // starts the clock
+
+    if (timer != null)
+    {
+        clearInterval(timer);   // clears the old game loop
+    }
     timer = setInterval(updateGame, 50);             // run updateGame every 50 milliseconds
 }
 
@@ -89,12 +115,17 @@ function updateGame()       // main game loop
 
 function moveBaton()    // moves the baton left or right if a button is being held down
 {
-    baton = document.getElementById('moveLeft()').addEventListener('click', () => {
-        position -= 10; //move left by 20px
-     })
-  document.getElementById('moveRight').addEventListener('click', () => {
-    position += 20; //move right by 20px
-  })   
+    batonX += batonDX;     // moves the baton by its speed
+
+    if (batonX < 0)
+    {
+        batonX = 0;        // keeps the baton inside the left wall
+    }
+
+    if (batonX + batonWidth > canvas.width)
+    {
+        batonX = canvas.width - batonWidth; // keeps the baton inside the right wall
+    }
 }
 
 function releaseBubble() // creates a new bubble when enough steps have passed
@@ -146,7 +177,7 @@ function checkBubbles() // checks whether bubbles were burst or escaped
         }
     }
 }
-drawEverything() // clears and redraws the canvas, bubbles, and baton
+function drawEverything() // clears and redraws the canvas, bubbles, and baton
 {
     pen.fillStyle = '#EAEDDC';
     pen.fillRect(0, 0, canvas.width, canvas.height);
@@ -162,28 +193,115 @@ drawEverything() // clears and redraws the canvas, bubbles, and baton
     pen.fillStyle = batonColor;
     pen.fillRect(batonX, batonY, batonWidth, batonHeight);
 }
-updateStats()  // updates the burst, escaped, and steps text on the page
-checkGameOver() // ends the game after all 100 bubbles are burst or escaped
-moveLeft()
-    function moveLeft() {
-document.getElementById('moveLeft').addEventListener('click', function(){
-    postition -= step;
-    if (postition <0) position = 0; 
-    baton.style.left = postition + 'px'
 
-});}
-        // starts moving the baton left
-moveRight()    
-    function moveRight() {
-document.getElementById('moveRight').addEventListener('click', function(){
-    postion += step;
-    const maxRight = window.innerWidth - baton.offsetWidth;
-    if (position > maxRight) postion = maxRight;
-    baton.style.left = position + 'px'
-});}   // starts moving the baton right
-stopMove()         // stops the baton from moving
+function setupPage()    // connects the HTML to the game
+{
+    statsText = document.getElementsByTagName('p')[0]; // uses your stats paragraph
 
-check(value)       // changes the difficulty based on the radio button selected
+    outputText = document.getElementById('output'); // gets the output message
+
+    if (outputText == null)
+    {
+        outputText = document.createElement('h2'); // makes the output message
+        outputText.id = 'output';
+        statsText.parentNode.insertBefore(outputText, statsText.nextSibling);
+    }
+
+    outputText.textContent = ''; // clears the old message
+
+    leftButton = document.getElementById('moveLeft();'); // gets left button
+    rightButton = document.getElementById('moveRight();'); // gets right button
+
+    if (leftButton != null)
+    {
+        leftButton.onmousedown = moveLeft; // starts moving left
+        leftButton.onmouseup = stopMove;   // stops moving left
+        leftButton.onmouseleave = stopMove; // stops if the mouse leaves
+    }
+
+    if (rightButton != null)
+    {
+        rightButton.onmousedown = moveRight; // starts moving right
+        rightButton.onmouseup = stopMove;    // stops moving right
+        rightButton.onmouseleave = stopMove; // stops if the mouse leaves
+    }
+
+    var easy = document.getElementById('modeEasy'); // easy radio button
+    var moderate = document.getElementById('modeMod'); // moderate radio button
+    var hard = document.getElementById('modeHard'); // hard radio button
+
+    if (easy != null)
+    {
+        easy.checked = true;        // starts on easy
+        easy.onchange = function(){ check(this.value); }; // changes to easy
+    }
+
+    if (moderate != null)
+    {
+        moderate.onchange = function(){ check(this.value); }; // changes to moderate
+    }
+
+    if (hard != null)
+    {
+        hard.onchange = function(){ check(this.value); }; // changes to hard
+    }
+}
+
+function updateStats()  // updates the burst, escaped, and steps text on the page
+{
+    statsText.innerHTML = 'Burst= ' + burstCount + '&nbsp;&nbsp; Escaped= ' + escapedCount + '&nbsp;&nbsp; Steps Elapsed= ' + stepCount;
+}
+
+function checkGameOver() // ends the game after all 100 bubbles are burst or escaped
+{
+    if (releasedCount == totalBubbles && bubbles.length == 0)
+    {
+        gameOver = true;      // marks the game as done
+        clearInterval(timer); // stops the game loop
+        timer = null;
+        stopTimer();          // stops the clock
+
+        var success = (burstCount / totalBubbles) * 100; // finds the success percent
+        outputText.textContent = 'Game over! Success: ' + success.toFixed(0) + '%';
+    }
+}
+
+function moveLeft() // starts moving the baton left
+{
+    batonDX = -batonSpeed; // sets left movement
+    moveBaton();          // moves once for a click
+    drawEverything();     // redraws after the click
+}
+
+function moveRight() // starts moving the baton right
+{
+    batonDX = batonSpeed; // sets right movement
+    moveBaton();         // moves once for a click
+    drawEverything();    // redraws after the click
+}
+
+function stopMove() // stops the baton from moving
+{
+    batonDX = 0;     // stops side movement
+}
+
+function check(value) // changes the difficulty based on the radio button selected
+{
+    var mode = value.toLowerCase(); // makes the mode easy to check
+
+    if (mode == 'easy')
+    {
+        releaseRate = 35; // easy releases slowly
+    }
+    else if (mode == 'moderate')
+    {
+        releaseRate = 20; // moderate releases faster
+    }
+    else if (mode == 'hard')
+    {
+        releaseRate = 10; // hard releases fastest
+    }
+}
 
 function randomColor()      // creates and returns a random color for a bubble
 {
